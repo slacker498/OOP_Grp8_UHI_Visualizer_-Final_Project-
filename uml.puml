@@ -1,0 +1,176 @@
+@startuml UHI_Visualizer
+
+' Style settings
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+
+' Abstract Zone class
+abstract class Zone {
+  - name : String
+  # getName() : String
+  # setName(name : String) : void
+}
+
+' DataPoint class
+class DataPoint {
+  - tempValue : double
+  + DataPoint(name : String, tempValue : double)
+  + getTempValue() : double
+  + setTempValue(tempValue : double) : void
+  + equals(o : Object) : boolean
+}
+
+' CityZone class
+class CityZone {
+  - dataPoints : ArrayList<DataPoint>
+  + CityZone(name : String)
+  + CityZone(name : String, dataPoints : ArrayList<DataPoint>)
+  + getDataPoints() : ArrayList<DataPoint>
+  + setDataPoints(dt_array : ArrayList<DataPoint>) : void
+  + equals(o : Object) : boolean
+}
+
+' Island class
+class Island {
+  - cityZones : ArrayList<CityZone>
+  + Island()
+  + Island(name : String, cityZones : ArrayList<CityZone>)
+  + getCityZones() : ArrayList<CityZone>
+  + setCityZones(zones : ArrayList<CityZone>) : void
+}
+
+' FileParsable interface
+interface FileParsable {
+  + readFromFile(filePath : String) : Island
+  + writeToFile(island : Island, destinationPath : String) : void
+}
+
+' CSVFileParser class
+class CSVFileParser {
+  + readFromFile(filePath : String) : Island
+  + writeToFile(island : Island, destinationPath : String) : void
+}
+
+' JSONFileParser class
+class JSONFileParser {
+  + readFromFile(filePath : String) : Island
+  + writeToFile(island : Island, destinationPath : String) : void
+}
+
+' StatisticsCalculator utility class
+abstract class StatisticsCalculator {
+  + {static} HIGH_TEMP : double = 35
+  + {static} LOW_TEMP : double = 20
+  + {static} getIslandMaxTemperature(island : Island) : Object[]
+  + {static} getIslandMinTemperature(island : Island) : Object[]
+  + {static} getSumOfTemperatures(zone : Zone) : double
+  + {static} getMeanTemperature(zone : Zone) : double
+  + {static} getMedianTemperature(zone : Zone) : double
+  + {static} getModeTemperature(zone : Zone) : double
+  + {static} getSTDEVTemperature(zone : Zone) : double
+  + {static} getHighTempFlaggedZones(zones : ArrayList<CityZone>) : HashMap<String,Double>
+  + {static} getLowTempFlaggedZones(zones : ArrayList<CityZone>) : HashMap<String,Double>
+  + {static} getOptimalTempZones(zones : ArrayList<CityZone>) : HashMap<String,Double>
+  + {static} getMegaIslandTempDifferentialMap(island : Island) : HashMap<String,Double>
+  + {static} getNanoIslandTempDifferentialMap(island : Island) : HashMap<String,Double>
+  + {static} getAllDataPointsInIsland(island : Island) : Integer
+}
+
+' MainApp class
+class MainApp {
+  - {static} stage : Stage
+  - {static} vbox : VBox
+  - {static} toolBar : ToolBar
+  + start(primaryStage : Stage) : void
+  + {static} main(args : String[]) : void
+  - {static} getStatsPanes(...) : ScrollPane
+  - {static} getPlotBarGraph(xAxisLabel : String, tempDiffMap : HashMap<String,Double>) : BarChart
+  - {static} getFlaggedZones(lowTempCityZones : HashMap<String,Double>, highTempCityZones : HashMap<String,Double>) : HBox
+  - {static} showNothing(errorMessage : String) : void
+  - {static} setRoot(fxml : String) : void
+  - {static} setRoot(fxml : String, title : String) : void
+  - {static} loadFXML(fxml : String) : Parent
+}
+
+' Exception classes
+class DuplicateDataPointException {
+  + DuplicateDataPointException(message : String)
+}
+
+class FileNotCSVException {
+  + FileNotCSVException(message : String)
+}
+
+class FileNotJSONException {
+  + FileNotJSONException(message : String)
+}
+
+class InvalidColumnException {
+  + InvalidColumnException(message : String)
+}
+
+class InvalidValueTypeException {
+  + InvalidValueTypeException(message : String)
+}
+
+' Inheritance relationships
+Zone <|-- DataPoint
+Zone <|-- CityZone
+Zone <|-- Island
+
+' Interface implementation
+FileParsable <|.. CSVFileParser
+FileParsable <|.. JSONFileParser
+
+' Exception inheritance
+RuntimeException <|-- DuplicateDataPointException
+IOException <|-- FileNotCSVException
+IOException <|-- FileNotJSONException
+RuntimeException <|-- InvalidColumnException
+RuntimeException <|-- InvalidValueTypeException
+
+' Composition relationships (strong ownership)
+Island *-- "1..*" CityZone : contains
+CityZone *-- "0..*" DataPoint : contains
+
+' Dependencies
+MainApp ..> CSVFileParser : uses
+MainApp ..> JSONFileParser : uses
+MainApp ..> StatisticsCalculator : uses
+MainApp ..> Island : uses
+CSVFileParser ..> Island : creates
+JSONFileParser ..> Island : creates
+
+' Additional dependencies for exceptions
+CSVFileParser ..> FileNotCSVException : throws
+CSVFileParser ..> DuplicateDataPointException : throws
+CSVFileParser ..> InvalidColumnException : throws
+CSVFileParser ..> InvalidValueTypeException : throws
+JSONFileParser ..> FileNotJSONException : throws
+JSONFileParser ..> DuplicateDataPointException : throws
+JSONFileParser ..> InvalidColumnException : throws
+JSONFileParser ..> InvalidValueTypeException : throws
+
+' Layout hints
+together {
+  class Zone
+  class DataPoint
+  class CityZone
+  class Island
+}
+
+together {
+  interface FileParsable
+  class CSVFileParser
+  class JSONFileParser
+}
+
+together {
+  class DuplicateDataPointException
+  class FileNotCSVException
+  class FileNotJSONException
+  class InvalidColumnException
+  class InvalidValueTypeException
+}
+
+@enduml

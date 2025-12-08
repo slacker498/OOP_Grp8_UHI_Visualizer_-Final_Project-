@@ -4,7 +4,8 @@
 * Purpose: To display statistical information for a UHI (Urban Heat Island)
   
 ### Instructions on Usage ###
-* Run the program to access the app's user interface using MainApp.java. The first page is as seen;
+* Run the program to access the app's user interface using MainApp.java (located here: \uhi_visualizer\src\main\java\com\uhi_visualizer\MainApp.java). 
+* The first page is as seen;
 * 
 * ![1stpage.png](src/main/resources/images/1stpage.png)
 * 

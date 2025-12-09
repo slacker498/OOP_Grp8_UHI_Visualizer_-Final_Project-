@@ -76,6 +76,12 @@ abstract class StatisticsCalculator {
   + {static} getAllDataPointsInIsland(island : Island) : Integer
 }
 
+' JavaFX Application (simplified)
+abstract class Application <<JavaFX>> {
+  + {abstract} start(primaryStage : Stage) : void
+  + {static} launch(args : String[]) : void
+}
+
 ' MainApp class
 class MainApp {
   - {static} stage : Stage
@@ -87,8 +93,8 @@ class MainApp {
   - {static} getPlotBarGraph(xAxisLabel : String, tempDiffMap : HashMap<String,Double>) : BarChart
   - {static} getFlaggedZones(lowTempCityZones : HashMap<String,Double>, highTempCityZones : HashMap<String,Double>) : HBox
   - {static} showNothing(errorMessage : String) : void
-  - {static} setRoot(fxml : String) : void
-  - {static} setRoot(fxml : String, title : String) : void
+  ~ {static} setRoot(fxml : String) : void
+  ~ {static} setRoot(fxml : String, title : String) : void
   - {static} loadFXML(fxml : String) : Parent
 }
 
@@ -117,6 +123,7 @@ class InvalidValueTypeException {
 Zone <|-- DataPoint
 Zone <|-- CityZone
 Zone <|-- Island
+Application <|-- MainApp
 
 ' Interface implementation
 FileParsable <|.. CSVFileParser
@@ -130,7 +137,7 @@ RuntimeException <|-- InvalidColumnException
 RuntimeException <|-- InvalidValueTypeException
 
 ' Composition relationships (strong ownership)
-Island *-- "1..*" CityZone : contains
+Island *-- "0..*" CityZone : contains
 CityZone *-- "0..*" DataPoint : contains
 
 ' Dependencies

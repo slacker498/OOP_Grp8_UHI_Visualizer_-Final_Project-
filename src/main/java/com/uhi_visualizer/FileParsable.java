@@ -10,6 +10,6 @@ public interface FileParsable {
     public Island readFromFile(String filePath) throws IOException, InvalidColumnException, InvalidValueTypeException, DuplicateDataPointException;
 
     // A subclass implementing this method must take an Island object and a file path, and create a specified file
-    public void writeToFile(Island island, String destinationPath);
+    public void writeToFile(Island island, String destinationPath) throws IOException;
 
 }

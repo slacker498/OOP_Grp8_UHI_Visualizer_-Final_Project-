@@ -17,7 +17,7 @@ import java.util.*;
 public class JSONFileParser implements FileParsable  {
 
     @Override
-    public Island readFromFile(String filePath) throws FileNotJSONException, InvalidValueTypeException, DuplicateDataPointException, InvalidColumnException {
+    public Island readFromFile(String filePath) throws IOException, InvalidValueTypeException, DuplicateDataPointException, InvalidColumnException {
         Island island = new Island(); // Create island for return
         // Set island name
         island.setName(filePath.substring(filePath.lastIndexOf("\\")+1, filePath.lastIndexOf(".")));
@@ -31,7 +31,7 @@ public class JSONFileParser implements FileParsable  {
             jsonObject = new JSONObject(content);
         }
         catch (IOException x){
-            System.out.println(x.getMessage());;
+            throw x;
         }
 
         try {
@@ -62,7 +62,7 @@ public class JSONFileParser implements FileParsable  {
     }
 
     @Override
-    public void writeToFile(Island island, String destinationPath) {
+    public void writeToFile(Island island, String destinationPath) throws IOException {
          try {
              FileWriter fileWriter = new FileWriter(destinationPath);
 
@@ -94,7 +94,7 @@ public class JSONFileParser implements FileParsable  {
              System.out.println("The JSON file has been successfully created");
 
          } catch (IOException e) {
-             System.out.println(e.getMessage());
+             throw e;
          }
 
     }

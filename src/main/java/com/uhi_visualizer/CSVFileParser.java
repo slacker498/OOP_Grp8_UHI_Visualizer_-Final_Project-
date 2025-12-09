@@ -15,6 +15,13 @@ public class CSVFileParser implements FileParsable {
     @Override
     //transform csv file into CityZone array
     public Island readFromFile (String filePath) throws IOException, InvalidColumnException, InvalidValueTypeException, DuplicateDataPointException {
+        Island island = new Island(); // Island object for return
+        // Set Island name
+        island.setName(filePath.substring((filePath.lastIndexOf("\\")+1), filePath.indexOf("."))); // only works for Windows systems
+        if (!(filePath.endsWith(".csv"))) { // check if file is csv
+            throw new FileNotCSVException("File type: non-csv");
+        }
+
         // This code block takes a file and iterates through each line. Each line is passed as a String array of
         // values and stored in the 'data' list.
         List<String[]> data = new ArrayList<>();
@@ -32,13 +39,6 @@ public class CSVFileParser implements FileParsable {
 
         // Exception handling to ensure all 3 columns are existent
         if (data.get(0).length != 3) throw new InvalidColumnException("Data File does not contain the required columns");
-
-        Island island = new Island(); // Island object for return
-        // Set Island name
-        island.setName(filePath.substring((filePath.lastIndexOf("\\")+1), filePath.indexOf("."))); // only works for Windows systems
-        if (!(filePath.contains(".csv"))) {
-            throw new FileNotCSVException("File type: non-csv");
-        }
 
         // Set island's cityZones
         ArrayList<String> cityZoneNames = new ArrayList<>(); // List of CityZone Names (without repetitions)
@@ -80,7 +80,7 @@ public class CSVFileParser implements FileParsable {
              FileWriter fileWriter = new FileWriter(destinationPath);
              for (CityZone city: island.getCityZones()){
                  for (DataPoint dataPoint: city.getDataPoints()) {
-                     fileWriter.write(city.getName()+","+dataPoint.getName()+","+dataPoint+"\n");
+                     fileWriter.write(city.getName()+","+dataPoint.getName()+","+dataPoint.getTempValue()+"\n");
                  }
              }
              fileWriter.close();

@@ -4,7 +4,7 @@
 * Purpose: To extract file data and display statistical information for a UHI (Urban Heat Island)
   
 ### Instructions on Usage ###
-* Run the program to access the app's user interface using MainApp.java (located here: \uhi_visualizer\src\main\java\com\uhi_visualizer\MainApp.java). To run, it is assumed that you have an advanced IDE like IntelliJ Idea or Visual Studio Code.
+* Run the program to access the app's user interface using MainApp.java (located here: \uhi_visualizer\src\main\java\com\uhi_visualizer\MainApp.java). To run, it is assumed that you have an advanced IDE like IntelliJ Idea or Visual Studio Code (Project should be opened from uhi_visualizer).
 * The first page is as seen;
 * 
 * ![1stpage.png](src/main/resources/images/1stpage.png)
